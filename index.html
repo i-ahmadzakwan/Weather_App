@@ -30,14 +30,25 @@
       color: #00aaff;
     }
 
-    .container {
+    /*.container {
       background-color: rgba(0, 0, 0, 0.6);
       padding: 50px;
       border-radius: 20px;
       box-shadow: 0 0 20px #000000;
       text-align: center;
       width: 320px;
-    }
+    }*/
+
+    .container {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #000000;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  margin: 20px auto;
+}
 
     input[type="text"] {
       padding: 10px;
@@ -95,7 +106,7 @@
       background-color: #00aaff;
     }
 
-    .hourly-forecast {
+    /*.hourly-forecast {
       margin-top: 20px;
       overflow-x: auto;
       display: flex;
@@ -110,7 +121,30 @@
       min-width: 80px;
       text-align: center;
     }
+*/
 
+.hourly-forecast {
+  margin-top: 20px;
+  overflow-x: auto;
+  display: flex;
+  gap: 8px;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+/* Hide scrollbar but keep functionality */
+.hourly-forecast::-webkit-scrollbar {
+  display: none;
+}
+
+.hour-box {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 70px;
+  text-align: center;
+  flex-shrink: 0; /* Prevent boxes from shrinking */
+}
     .air-quality-toggle {
       margin-top: 10px;
       cursor: pointer;
@@ -123,6 +157,44 @@
       margin-top: 10px;
       text-align: left;
     }
+
+
+    /* Tablet and larger mobile */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    width: 95%;
+  }
+  
+  input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 90%;
+  max-width: 300px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+}
+
+/* for the Small mobile devices */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 24px;
+  }
+  
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .hour-box {
+    min-width: 70px;
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
   </style>
 </head>
 <body>

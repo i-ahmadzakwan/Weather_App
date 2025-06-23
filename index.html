@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Weather App</title>
+  <style>
+    :root {
+      --bg-dark: linear-gradient(to bottom right, #0a0a0a, #0d1b2a);
+      --bg-light: linear-gradient(to bottom right, #d7ecff, #ffffff);
+      --text-dark: #ffffff;
+      --text-light: #000000;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    h1 {
+      color: #00aaff;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #000000;
+      text-align: center;
+      width: 320px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 80%;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #0077cc;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+
+    button:hover {
+      background-color: #005999;
+    }
+
+    .weather-result {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .weather-icon {
+      width: 64px;
+      height: 64px;
+    }
+
+    .light-mode {
+      background: var(--bg-light);
+      color: var(--text-light);
+    }
+
+    .light-mode .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 10px #aaa;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-bar-fill {
+      height: 10px;
+      background-color: #00aaff;
+    }
+
+    .hourly-forecast {
+      margin-top: 20px;
+      overflow-x: auto;
+      display: flex;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+
+    .hour-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .air-quality-toggle {
+      margin-top: 10px;
+      cursor: pointer;
+      color: #00aaff;
+      text-decoration: underline;
+    }
+
+    .air-details {
+      display: none;
+      margin-top: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Weather App</h1>
+    <input type="text" id="locationInput" placeholder="Enter location">
+    <br>
+    <button onclick="getWeather()">Get Weather</button>
+    <button onclick="toggleTheme()">Toggle Theme</button>
+    <div class="weather-result" id="weatherResult"></div>
+    <div class="hourly-forecast" id="hourlyForecast"></div>
+    <div class="air-quality-toggle" onclick="toggleAirQuality()">Show Air Quality Details</div>
+    <div class="air-details" id="airDetails"></div>
+    <div id="clothingSuggestion" style="margin-top:10px;"></div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    function toggleAirQuality() {
+      const details = document.getElementById('airDetails');
+      details.style.display = details.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function updateBackground(condition, isDay) {
+      const lower = condition.toLowerCase();
+      if (isDay === 0) {
+        document.body.style.background = 'linear-gradient(to bottom, #000428, #004e92)';
+        return;
+      }
+      if (lower.includes('sunny')) {
+        document.body.style.background = 'linear-gradient(to right, #ffcf33, #ff9933)';
+      } else if (lower.includes('rain')) {
+        document.body.style.background = 'linear-gradient(to bottom, #4b6cb7, #182848)';
+      } else if (lower.includes('snow')) {
+        document.body.style.background = 'linear-gradient(to bottom, #e0eafc, #cfdef3)';
+      } else if (lower.includes('cloud')) {
+        document.body.style.background = 'linear-gradient(to right, #bdc3c7, #2c3e50)';
+      } else {
+        document.body.style.background = 'linear-gradient(to bottom right, #0a0a0a, #0d1b2a)';
+      }
+    }
+
+    function getAQILevel(index) {
+      const levels = ["Good", "Moderate", "Unhealthy for sensitive groups", "Unhealthy", "Very Unhealthy", "Hazardous"];
+      return levels[index - 1] || "Unknown";
+    }
+
+    function getUVLevel(uv) {
+      if (uv < 3) return `Low (${uv}) – Wear sunglasses`;
+      else if (uv < 6) return `Moderate (${uv}) – Use sunscreen`;
+      else if (uv < 8) return `High (${uv}) – Protective clothing advised`;
+      else return `Very High (${uv}) – Stay indoors during midday`;
+    }
+
+    function getClothingSuggestion(temp, condition) {
+      if (temp >= 25) return "T-shirt and shorts recommended.";
+      else if (temp >= 15) return "Light jacket suggested.";
+      else if (temp >= 5) return "Wear a warm coat.";
+      else return "Heavy winter wear is necessary.";
+    }
+
+    async function getWeather() {
+      const location = document.getElementById("locationInput").value;
+      const apiKey = "139f720068504a8c87d61339252306";
+      const url = `http://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(location)}&days=1&aqi=yes&alerts=no`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Location not found");
+
+        const data = await response.json();
+        const c = data.current;
+        const l = data.location;
+        updateBackground(c.condition.text, c.is_day);
+
+        document.getElementById("weatherResult").innerHTML = `
+          <strong>${l.name}, ${l.country}</strong><br>
+          <img src="https:${c.condition.icon}" alt="${c.condition.text}" class="weather-icon"><br>
+          <strong>${c.condition.text}</strong><br>
+          Temperature: <strong>${c.temp_c}&deg;C</strong><br>
+          Feels like: <strong>${c.feelslike_c}&deg;C</strong><br>
+          <br>
+          <strong>Wind:</strong> ${c.wind_kph} kph <span style="display:inline-block; transform: rotate(${c.wind_degree}deg);">🧭</span> ${c.wind_dir}<br>
+          <strong>UV Index:</strong> ${getUVLevel(c.uv)}<br>
+          <strong>AQI:</strong> ${getAQILevel(c.air_quality["us-epa-index"])}<br>
+          <strong>Humidity:</strong> ${c.humidity}%
+          <div class="progress-bar">
+            <div class="progress-bar-fill" style="width: ${c.humidity}%;"></div>
+          </div>
+          <strong>Dew Point:</strong> ${c.dewpoint_c}&deg;C → Comfortable
+        `;
+
+        const aqi = c.air_quality;
+        document.getElementById("airDetails").innerHTML = `
+          <strong>Pollutants:</strong><br>
+          PM2.5: ${aqi.pm2_5.toFixed(2)} µg/m³ – Can affect lungs<br>
+          O₃ (Ozone): ${aqi.o3.toFixed(2)} µg/m³ – May irritate respiratory system<br>
+          NO₂: ${aqi.no2.toFixed(2)} µg/m³<Br>
+          SO₂: ${aqi.so2.toFixed(2)} µg/m³<Br>
+          CO: ${aqi.co.toFixed(2)} µg/m³
+        `;
+
+        document.getElementById("clothingSuggestion").innerHTML = `<strong>Clothing Suggestion:</strong> ${getClothingSuggestion(c.temp_c, c.condition.text)}`;
+
+        const hourly = data.forecast.forecastday[0].hour;
+        const forecastContainer = document.getElementById("hourlyForecast");
+        forecastContainer.innerHTML = hourly.slice(0, 12).map(h => `
+          <div class="hour-box">
+            <div>${new Date(h.time).getHours()}:00</div>
+            <img src="https:${h.condition.icon}" width="32" height="32">
+            <div>${h.temp_c}&deg;C</div>
+          </div>
+        `).join('');
+
+      } catch (error) {
+        document.getElementById("weatherResult").innerHTML = `<span style="color:red;">${error.message}</span>`;
+      }
+    }
+  </script>
+</body>
+</html>

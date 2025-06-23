@@ -5,8 +5,8 @@ Get real-time weather info like temperature, wind, and air quality for any locat
 
 Features:
 
-Current weather + "Feels Like" temp
+->Current weather + "Feels Like" temp
 
-Wind speed & direction
+->Wind speed & direction
 
-Air quality alerts
+->Air quality alerts

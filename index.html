@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
   <title>Dynamic Weather App</title>
   <style>
 
@@ -22,13 +25,18 @@ body {
 
 
     :root {
-      --bg-dark: linear-gradient(to bottom right, #0a0a0a, #0d1b2a);
-      --bg-light: linear-gradient(to bottom right, #d7ecff, #ffffff);
-      --text-dark: #ffffff;
-      --text-light: #000000;
-    }
+  --bg-dark: linear-gradient(to bottom right, #0a0a0a, #0d1b2a);
+  --bg-light: linear-gradient(to bottom right, #d7ecff, #ffffff);
+  --text-dark: #ffffff;
+  --text-light: #000000;
 
-    body {
+  --footer-bg-dark: rgba(0, 0, 0, 0.7);
+  --footer-bg-light: rgba(255, 255, 255, 0.8);
+  --footer-text-dark: #ccc;
+  --footer-text-light: #333;
+}
+
+    /*body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-dark);
@@ -40,7 +48,34 @@ body {
       min-height: 100vh;
       padding: 20px;
       transition: background 0.5s, color 0.5s;
-    }
+    }*/
+
+     body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: background 0.5s, color 0.5s;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* centers your app content vertically */
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #000000;
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+  margin: 20px auto;
+}
 
     h1 {
       color: #00aaff;
@@ -109,6 +144,12 @@ body {
       box-shadow: 0 0 10px #aaa;
     }
 
+    .light-mode .contact-footer {
+  background-color: var(--footer-bg-light);
+  color: var(--footer-text-light);
+}
+
+
     .progress-bar {
       width: 100%;
       background-color: #ccc;
@@ -139,14 +180,26 @@ body {
     }
 */
 
+/*.hourly-forecast {
+  margin-top: 20px;
+  overflow-x: auto;
+  display: flex;
+  gap: 8px;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch; 
+}*/
+
 .hourly-forecast {
   margin-top: 20px;
   overflow-x: auto;
   display: flex;
   gap: 8px;
   padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 
 /* Hide scrollbar but keep functionality */
 .hourly-forecast::-webkit-scrollbar {
@@ -211,6 +264,37 @@ body {
   }
 }
 
+
+.contact-footer {
+  width: 100%;
+  text-align: center;
+  padding: 15px 10px;
+  border-top: 1px solid #555;
+  margin-top: auto;
+  font-size: 16px;
+  background-color: var(--footer-bg-dark);
+  color: var(--footer-text-dark);
+  transition: background 0.5s, color 0.5s;
+}
+
+
+.contact-footer p {
+  margin: 0 0 10px 0;
+}
+
+.contact-footer a {
+  color: #00aaff;
+  margin: 0 10px;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.contact-footer a:hover {
+  color: #ffffff;
+}
+
+
+
   </style>
 </head>
 <body>
@@ -226,6 +310,16 @@ body {
     <div class="air-details" id="airDetails"></div>
     <div id="clothingSuggestion" style="margin-top:10px;"></div>
   </div>
+
+
+  <footer class="contact-footer">
+  <p>Connect with me:</p>
+  <a href="https://www.instagram.com/i.ahmadzakwan/" target="_blank"><i class="fab fa-instagram"></i></a>
+  <a href="https://www.linkedin.com/in/ahmad-zakwan-83878331b/" target="_blank"><i class="fab fa-linkedin"></i></a>
+  <a href="https://github.com/i-ahmadzakwan" target="_blank"><i class="fab fa-github"></i></a>
+</footer>
+
+
 
   <script>
     function toggleTheme() {
@@ -319,14 +413,40 @@ body {
         document.getElementById("clothingSuggestion").innerHTML = `<strong>Clothing Suggestion:</strong> ${getClothingSuggestion(c.temp_c, c.condition.text)}`;
 
         const hourly = data.forecast.forecastday[0].hour;
+       
         const forecastContainer = document.getElementById("hourlyForecast");
-        forecastContainer.innerHTML = hourly.slice(0, 12).map(h => `
-          <div class="hour-box">
-            <div>${new Date(h.time).getHours()}:00</div>
-            <img src="https:${h.condition.icon}" width="32" height="32">
-            <div>${h.temp_c}&deg;C</div>
-          </div>
-        `).join('');
+
+// Get current hour at location
+const currentHour = parseInt(data.current.last_updated.split(' ')[1].split(':')[0]);
+
+// Find the index of the current hour in hourly array
+let startIndex = hourly.findIndex(h => {
+  const hHour = parseInt(h.time.split(' ')[1].split(':')[0]);
+  return hHour === currentHour;
+});
+
+// If not found (rare), default to 0
+if (startIndex === -1) startIndex = 0;
+
+// Get next 12 hours from current hour
+const next12Hours = hourly.slice(startIndex, startIndex + 12);
+
+forecastContainer.innerHTML = next12Hours.map(h => {
+  const timePart = h.time.split(' ')[1];
+  let hour = parseInt(timePart.split(':')[0]);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  if (hour === 0) hour = 12;
+
+  return `
+    <div class="hour-box">
+      <div>${hour} ${ampm}</div>
+      <img src="https:${h.condition.icon}" width="32" height="32">
+      <div>${h.temp_c}&deg;C</div>
+    </div>
+  `;
+}).join('');
+
 
       } catch (error) {
         document.getElementById("weatherResult").innerHTML = `<span style="color:red;">${error.message}</span>`;

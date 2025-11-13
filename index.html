@@ -294,12 +294,281 @@ body {
 }
 
 
+/* ===== WEATHER ANIMATIONS ===== */
+
+/* Sunny Animation */
+.sun {
+  width: 60px;
+  height: 60px;
+  background: #ffde00;
+  border-radius: 50%;
+  position: relative;
+  animation: rotateSun 10s linear infinite;
+  box-shadow: 0 0 30px #ffde00;
+}
+
+.sun::before, .sun::after {
+  content: '';
+  position: absolute;
+  background: #ffde00;
+  border-radius: 50%;
+}
+
+.sun::before {
+  width: 80px;
+  height: 20px;
+  top: 20px;
+  left: -10px;
+}
+
+.sun::after {
+  width: 20px;
+  height: 80px;
+  left: 20px;
+  top: -10px;
+}
+
+@keyframes rotateSun {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Rain Animation */
+.rain-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.raindrop {
+  position: absolute;
+  width: 3px;
+  height: 15px;
+  background: linear-gradient(to bottom, transparent, #4b6cb7);
+  border-radius: 0 0 5px 5px;
+  animation: rainFall 1.5s linear infinite;
+}
+
+.raindrop:nth-child(1) { left: 20%; animation-delay: 0s; }
+.raindrop:nth-child(2) { left: 40%; animation-delay: 0.2s; }
+.raindrop:nth-child(3) { left: 60%; animation-delay: 0.4s; }
+.raindrop:nth-child(4) { left: 80%; animation-delay: 0.6s; }
+.raindrop:nth-child(5) { left: 30%; animation-delay: 0.8s; }
+.raindrop:nth-child(6) { left: 70%; animation-delay: 1s; }
+
+@keyframes rainFall {
+  0% { transform: translateY(-20px); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(80px); opacity: 0; }
+}
+
+/* Snow Animation */
+.snow-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.snowflake {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  filter: blur(1px);
+  animation: snowFall 3s linear infinite;
+}
+
+.snowflake:nth-child(1) { left: 20%; animation-delay: 0s; }
+.snowflake:nth-child(2) { left: 50%; animation-delay: 1s; }
+.snowflake:nth-child(3) { left: 80%; animation-delay: 2s; }
+.snowflake:nth-child(4) { left: 30%; animation-delay: 1.5s; }
+.snowflake:nth-child(5) { left: 70%; animation-delay: 0.5s; }
+
+@keyframes snowFall {
+  0% { 
+    transform: translateY(-20px) translateX(0px); 
+    opacity: 0; 
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { 
+    transform: translateY(80px) translateX(20px); 
+    opacity: 0; 
+  }
+}
+
+/* Cloud Animation */
+.cloud {
+  position: relative;
+  width: 80px;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 40px;
+  animation: floatCloud 6s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+.cloud::before, .cloud::after {
+  content: '';
+  position: absolute;
+  background: #f0f0f0;
+  border-radius: 50%;
+}
+
+.cloud::before {
+  width: 30px;
+  height: 30px;
+  top: -15px;
+  left: 15px;
+}
+
+.cloud::after {
+  width: 40px;
+  height: 40px;
+  top: -20px;
+  right: 15px;
+}
+
+@keyframes floatCloud {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  50% { transform: translateX(20px) translateY(-5px); }
+}
+
+/* Lightning Animation */
+.lightning {
+  position: relative;
+  width: 4px;
+  height: 20px;
+  background: #ffde00;
+  animation: lightningFlash 4s infinite;
+  box-shadow: 0 0 10px #ffde00;
+}
+
+.lightning::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 12px solid #ffde00;
+  top: -12px;
+  left: -6px;
+}
+
+@keyframes lightningFlash {
+  0%, 85%, 100% { opacity: 0; }
+  90%, 95% { opacity: 1; }
+}
+
+/* Wind Animation */
+.wind-container {
+  position: relative;
+  width: 150px;
+  height: 50px;
+}
+
+.wind-line {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  margin: 10px 0;
+  animation: windBlow 2s linear infinite;
+}
+
+.wind-line:nth-child(2) { animation-delay: 0.5s; }
+.wind-line:nth-child(3) { animation-delay: 1s; }
+
+@keyframes windBlow {
+  0% { 
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  50% { opacity: 0.7; }
+  100% { 
+    transform: translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Fog/Mist Animation */
+.fog-container {
+  position: relative;
+  width: 150px;
+  height: 80px;
+}
+
+.fog-layer {
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  border-radius: 10px;
+  animation: fogMove 8s linear infinite;
+}
+
+.fog-layer:nth-child(2) { top: 30px; animation-delay: 2s; }
+.fog-layer:nth-child(3) { top: 60px; animation-delay: 4s; }
+
+@keyframes fogMove {
+  0% { transform: translateX(-100px); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateX(100px); opacity: 0; }
+}
+
+
+/* Moon Animation for Night Time */
+.moon {
+  width: 60px;
+  height: 60px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  position: relative;
+  animation: floatMoon 8s ease-in-out infinite;
+  box-shadow: 
+    0 0 20px rgba(255,255,255,0.5),
+    inset -15px 0px 0px #e0e0e0;
+}
+
+.moon::before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: #d0d0d0;
+  border-radius: 50%;
+  top: 15px;
+  left: 10px;
+  box-shadow: 
+    20px 10px 0 0px #d0d0d0,
+    10px 25px 0 0px #d0d0d0;
+}
+
+@keyframes floatMoon {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Night Cloud Style */
+.night-cloud {
+  background: #a0a0a0;
+  box-shadow: 0 0 15px rgba(200,200,200,0.2);
+}
+
+.night-cloud::before,
+.night-cloud::after {
+  background: #a0a0a0;
+}
+
+
 
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Weather App</h1>
+     <div id="weatherAnimation" style="height: 100px; display: flex; align-items: center; justify-content: center; margin: 10px 0;"></div>
     <input type="text" id="locationInput" placeholder="Enter location">
     <br>
     <button onclick="getWeather()">Get Weather</button>
@@ -331,24 +600,138 @@ body {
       details.style.display = details.style.display === 'none' ? 'block' : 'none';
     }
 
-    function updateBackground(condition, isDay) {
-      const lower = condition.toLowerCase();
-      if (isDay === 0) {
-        document.body.style.background = 'linear-gradient(to bottom, #000428, #004e92)';
-        return;
-      }
-      if (lower.includes('sunny')) {
-        document.body.style.background = 'linear-gradient(to right, #ffcf33, #ff9933)';
-      } else if (lower.includes('rain')) {
-        document.body.style.background = 'linear-gradient(to bottom, #4b6cb7, #182848)';
-      } else if (lower.includes('snow')) {
-        document.body.style.background = 'linear-gradient(to bottom, #e0eafc, #cfdef3)';
-      } else if (lower.includes('cloud')) {
-        document.body.style.background = 'linear-gradient(to right, #bdc3c7, #2c3e50)';
-      } else {
-        document.body.style.background = 'linear-gradient(to bottom right, #0a0a0a, #0d1b2a)';
-      }
+   function updateBackground(condition, isDay) {
+  const lower = condition.toLowerCase();
+  const animationContainer = document.getElementById('weatherAnimation');
+  
+  // Smooth background transition
+  document.body.style.transition = 'background 1s ease';
+  
+  if (isDay === 0) {
+    document.body.style.background = 'linear-gradient(to bottom, #000428, #004e92)';
+    if (animationContainer) animationContainer.style.filter = 'brightness(0.8)';
+  } else {
+    if (lower.includes('sunny')) {
+      document.body.style.background = 'linear-gradient(to right, #ffcf33, #ff9933)';
+    } else if (lower.includes('rain')) {
+      document.body.style.background = 'linear-gradient(to bottom, #4b6cb7, #182848)';
+    } else if (lower.includes('snow')) {
+      document.body.style.background = 'linear-gradient(to bottom, #e0eafc, #cfdef3)';
+    } else if (lower.includes('cloud')) {
+      document.body.style.background = 'linear-gradient(to right, #bdc3c7, #2c3e50)';
+    } else {
+      document.body.style.background = 'linear-gradient(to bottom right, #0a0a0a, #0d1b2a)';
     }
+    if (animationContainer) animationContainer.style.filter = 'brightness(1)';
+  }
+}
+
+
+   function toggleAirQuality() {
+  const details = document.getElementById('airDetails');
+  details.style.display = details.style.display === 'none' ? 'block' : 'none';
+}
+
+// ===== UPDATED FUNCTION FOR WEATHER ANIMATIONS =====
+function showWeatherAnimation(condition, isDay) {
+  const conditionLower = condition.toLowerCase();
+  const animationContainer = document.getElementById('weatherAnimation');
+  
+  // Clear previous animation
+  animationContainer.innerHTML = '';
+  
+  // Check if it's night time first
+  if (isDay === 0) {
+    // Night time animations
+    if (conditionLower.includes('clear')) {
+      // Moon animation for clear nights
+      animationContainer.innerHTML = '<div class="moon"></div>';
+    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle')) {
+      animationContainer.innerHTML = `
+        <div class="rain-container">
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+        </div>
+      `;
+    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet')) {
+      animationContainer.innerHTML = `
+        <div class="snow-container">
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+        </div>
+      `;
+    } else if (conditionLower.includes('thunder') || conditionLower.includes('storm')) {
+      animationContainer.innerHTML = '<div class="lightning"></div>';
+    } else {
+      // Default night animation (clouds or stars)
+      animationContainer.innerHTML = '<div class="cloud night-cloud"></div>';
+    }
+  } else {
+    // Day time animations
+    if (conditionLower.includes('sunny') || conditionLower.includes('clear')) {
+      animationContainer.innerHTML = '<div class="sun"></div>';
+    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle')) {
+      animationContainer.innerHTML = `
+        <div class="rain-container">
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+          <div class="raindrop"></div>
+        </div>
+      `;
+    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet')) {
+      animationContainer.innerHTML = `
+        <div class="snow-container">
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+          <div class="snowflake"></div>
+        </div>
+      `;
+    } else if (conditionLower.includes('cloud') || conditionLower.includes('overcast')) {
+      animationContainer.innerHTML = '<div class="cloud"></div>';
+    } else if (conditionLower.includes('thunder') || conditionLower.includes('storm')) {
+      animationContainer.innerHTML = '<div class="lightning"></div>';
+    } else if (conditionLower.includes('wind')) {
+      animationContainer.innerHTML = `
+        <div class="wind-container">
+          <div class="wind-line"></div>
+          <div class="wind-line"></div>
+          <div class="wind-line"></div>
+        </div>
+      `;
+    } else if (conditionLower.includes('fog') || conditionLower.includes('mist') || conditionLower.includes('haze')) {
+      animationContainer.innerHTML = `
+        <div class="fog-container">
+          <div class="fog-layer"></div>
+          <div class="fog-layer"></div>
+          <div class="fog-layer"></div>
+        </div>
+      `;
+    } else {
+      // Default animation for other conditions
+      animationContainer.innerHTML = '<div class="cloud"></div>';
+    }
+  }
+}
+// ===== END OF UPDATED ANIMATION FUNCTION =====
+
+
+
+
+
+
+
 
     function getAQILevel(index) {
       const levels = ["Good", "Moderate", "Unhealthy for sensitive groups", "Unhealthy", "Very Unhealthy", "Hazardous"];
@@ -382,6 +765,8 @@ body {
         const c = data.current;
         const l = data.location;
         updateBackground(c.condition.text, c.is_day);
+
+       showWeatherAnimation(c.condition.text, c.is_day);                               // for the animations
 
         document.getElementById("weatherResult").innerHTML = `
           <strong>${l.name}, ${l.country}</strong><br>

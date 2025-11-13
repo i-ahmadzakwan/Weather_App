@@ -50,15 +50,15 @@ body {
       transition: background 0.5s, color 0.5s;
     }*/
 
-     body {
+ body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-dark);
+  background: #0a0a0a; /* Changed to solid color */
   color: var(--text-dark);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: background 0.5s, color 0.5s;
+  transition: color 0.5s; /* Removed background transition */
 }
 
 .container {
@@ -102,12 +102,40 @@ body {
 }
 
     input[type="text"] {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      width: 80%;
-      margin-bottom: 15px;
-    }
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  width: 80%;
+  margin-bottom: 15px;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 170, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+input[type="text"]::placeholder {
+  color: #888;
+}
+
+.light-mode input[type="text"] {
+  background-color: #f8f8f8;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.light-mode input[type="text"]:focus {
+  background-color: #ffffff;
+  border-color: #00aaff;
+  box-shadow: 0 2px 8px rgba(0, 170, 255, 0.2);
+}
 
     button {
       padding: 10px 20px;
@@ -264,35 +292,49 @@ body {
   }
 }
 
-
 .contact-footer {
   width: 100%;
   text-align: center;
   padding: 15px 10px;
-  border-top: 1px solid #555;
+  border-top: 1px solid #0f7fb8;
   margin-top: auto;
   font-size: 16px;
-  background-color: var(--footer-bg-dark);
-  color: var(--footer-text-dark);
+  background-color:  #0f7fb8;
+  color: white;
   transition: background 0.5s, color 0.5s;
 }
-
 
 .contact-footer p {
   margin: 0 0 10px 0;
 }
 
 .contact-footer a {
-  color: #00aaff;
+  color: white;
   margin: 0 10px;
   font-size: 20px;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .contact-footer a:hover {
-  color: #ffffff;
+  color: #003366;
+  transform: scale(1.2);
 }
 
+.light-mode .contact-footer {
+  background-color: #0f7fb8;
+  color: white;
+  border-top: 1px solid #0f7fb8;
+}
+
+.light-mode .contact-footer a {
+  color: white;
+}
+
+.light-mode .contact-footer a:hover {
+  color: #003366;
+  transform: scale(1.2);
+}
 
 /* ===== WEATHER ANIMATIONS ===== */
 
@@ -563,9 +605,280 @@ body {
 
 
 
+
+/* ===== BACKGROUND ANIMATIONS ===== */
+#animatedBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Animated Gradient Sky */
+.animated-sky {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating Particles/Dust */
+.particles-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: floatParticle 20s infinite linear;
+}
+
+.particle:nth-child(1) { width: 3px; height: 3px; left: 10%; animation-duration: 25s; }
+.particle:nth-child(2) { width: 2px; height: 2px; left: 20%; animation-duration: 30s; animation-delay: 2s; }
+.particle:nth-child(3) { width: 4px; height: 4px; left: 30%; animation-duration: 20s; animation-delay: 4s; }
+.particle:nth-child(4) { width: 3px; height: 3px; left: 40%; animation-duration: 35s; animation-delay: 1s; }
+.particle:nth-child(5) { width: 2px; height: 2px; left: 50%; animation-duration: 28s; animation-delay: 3s; }
+
+@keyframes floatParticle {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+}
+
+/* Pulsing Aurora Effect */
+.aurora-background {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #000428, #004e92);
+  animation: auroraPulse 8s ease-in-out infinite;
+}
+
+@keyframes auroraPulse {
+  0%, 100% { 
+    filter: hue-rotate(0deg) brightness(1);
+    background-size: 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+  }
+  50% { 
+    filter: hue-rotate(45deg) brightness(1.1);
+    background-size: 250% 250%, 250% 250%, 250% 250%, 100% 100%;
+  }
+}
+
+/* Fixed Moving Cloud Layers */
+.cloud-background {
+  background: linear-gradient(to bottom, #87CEEB, #98FB98);
+  position: relative;
+  overflow: hidden;
+}
+
+.cloud-layer {
+  position: absolute;
+  width: 200%;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  animation: moveClouds 60s linear infinite;
+  filter: blur(5px);
+}
+
+.cloud-layer:nth-child(1) { 
+  top: 10%; 
+  animation-duration: 80s; 
+  opacity: 0.6; 
+  height: 80px;
+}
+.cloud-layer:nth-child(2) { 
+  top: 30%; 
+  animation-duration: 60s; 
+  opacity: 0.4; 
+  height: 60px;
+}
+.cloud-layer:nth-child(3) { 
+  top: 50%; 
+  animation-duration: 40s; 
+  opacity: 0.2; 
+  height: 70px;
+}
+
+@keyframes moveClouds {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+/* Rainbow Wave Effect */
+.rainbow-wave {
+  background: linear-gradient(45deg, 
+    #ff0000, #ff8000, #ffff00, #00ff00, 
+    #00ffff, #0000ff, #8000ff, #ff0080);
+  background-size: 400% 400%;
+  animation: rainbowWave 10s ease infinite;
+}
+
+@keyframes rainbowWave {
+  0% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  50% { 
+    background-position: 100% 50%;
+    filter: hue-rotate(180deg);
+  }
+  100% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Starry Night Sky */
+.starry-night {
+  background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+  position: relative;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 4s infinite;
+}
+
+.star:nth-child(1) { top: 10%; left: 20%; width: 2px; height: 2px; animation-delay: 0s; }
+.star:nth-child(2) { top: 20%; left: 50%; width: 3px; height: 3px; animation-delay: 1s; }
+.star:nth-child(3) { top: 30%; left: 70%; width: 1px; height: 1px; animation-delay: 2s; }
+.star:nth-child(4) { top: 40%; left: 30%; width: 2px; height: 2px; animation-delay: 3s; }
+.star:nth-child(5) { top: 60%; left: 80%; width: 3px; height: 3px; animation-delay: 0.5s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Lightning Storm Effect */
+.storm-background {
+  background: linear-gradient(to bottom, #2c3e50, #34495e);
+  animation: lightningFlash 8s infinite;
+}
+
+@keyframes lightningFlash {
+  0%, 85%, 100% { 
+    filter: brightness(1);
+    background: linear-gradient(to bottom, #2c3e50, #34495e);
+  }
+  90%, 95% { 
+    filter: brightness(2);
+    background: linear-gradient(to bottom, #4a6491, #5a74a1);
+  }
+}
+
+/* Bubbling Water Effect */
+.water-background {
+  background: linear-gradient(to bottom, #1e3c72, #2a5298);
+  position: relative;
+}
+
+.bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: bubbleRise 15s infinite linear;
+}
+
+.bubble:nth-child(1) { left: 10%; width: 20px; height: 20px; animation-duration: 20s; }
+.bubble:nth-child(2) { left: 30%; width: 15px; height: 15px; animation-duration: 25s; animation-delay: 2s; }
+.bubble:nth-child(3) { left: 60%; width: 25px; height: 25px; animation-duration: 18s; animation-delay: 4s; }
+
+@keyframes bubbleRise {
+  0% { 
+    transform: translateY(100vh) scale(0.5);
+    opacity: 0;
+  }
+  10% { 
+    opacity: 0.5;
+    transform: translateY(90vh) scale(0.8);
+  }
+  90% { 
+    opacity: 0.3;
+    transform: translateY(10vh) scale(1.2);
+  }
+  100% { 
+    transform: translateY(-50px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Heat Wave Distortion */
+.heat-background {
+  background: linear-gradient(45deg, #ff9500, #ff5e00, #ff2a00);
+  position: relative;
+}
+
+.heat-wave {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: heatShimmer 3s infinite linear;
+}
+
+@keyframes heatShimmer {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* Meteor Shower */
+.meteor-background {
+  background: linear-gradient(to bottom, #0f0c29, #302b63);
+  position: relative;
+}
+
+.meteor {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px white;
+  animation: meteorFall 3s infinite linear;
+}
+
+.meteor:nth-child(1) { top: 0; left: 10%; animation-delay: 0s; }
+.meteor:nth-child(2) { top: 0; left: 30%; animation-delay: 1s; }
+.meteor:nth-child(3) { top: 0; left: 60%; animation-delay: 2s; }
+
+@keyframes meteorFall {
+  0% { 
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+  100% { 
+    transform: translateY(100vh) translateX(100px);
+    opacity: 0;
+  }
+}
+
+
+
+
+
+
   </style>
 </head>
 <body>
+  <div id="animatedBackground"></div>                                   
+
   <div class="container">
     <h1>Weather App</h1>
      <div id="weatherAnimation" style="height: 100px; display: flex; align-items: center; justify-content: center; margin: 10px 0;"></div>
@@ -600,29 +913,113 @@ body {
       details.style.display = details.style.display === 'none' ? 'block' : 'none';
     }
 
-   function updateBackground(condition, isDay) {
-  const lower = condition.toLowerCase();
-  const animationContainer = document.getElementById('weatherAnimation');
+ function updateBackground(condition, isDay) {
+  const background = document.getElementById('animatedBackground');
+  const conditionLower = condition.toLowerCase();
   
-  // Smooth background transition
-  document.body.style.transition = 'background 1s ease';
+  // Clear previous background
+  background.innerHTML = '';
+  background.className = '';
+  
+  // Smooth transition
+  background.style.transition = 'all 1.5s ease';
   
   if (isDay === 0) {
-    document.body.style.background = 'linear-gradient(to bottom, #000428, #004e92)';
-    if (animationContainer) animationContainer.style.filter = 'brightness(0.8)';
-  } else {
-    if (lower.includes('sunny')) {
-      document.body.style.background = 'linear-gradient(to right, #ffcf33, #ff9933)';
-    } else if (lower.includes('rain')) {
-      document.body.style.background = 'linear-gradient(to bottom, #4b6cb7, #182848)';
-    } else if (lower.includes('snow')) {
-      document.body.style.background = 'linear-gradient(to bottom, #e0eafc, #cfdef3)';
-    } else if (lower.includes('cloud')) {
-      document.body.style.background = 'linear-gradient(to right, #bdc3c7, #2c3e50)';
+    // Night backgrounds
+    if (conditionLower.includes('clear')) {
+      // Clear night - stars and aurora
+      background.className = 'starry-night aurora-background';
+      background.innerHTML = `
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+        <div class="meteor"></div>
+      `;
+    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle') || conditionLower.includes('shower')) {
+      // Rainy night - storm effect
+      background.className = 'storm-background water-background';
+      background.innerHTML = `
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+      `;
+    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet') || conditionLower.includes('ice')) {
+      // Snowy night - particles
+      background.className = 'particles-background';
+      background.style.background = 'linear-gradient(to bottom, #2c3e50, #4a6491)';
+      background.innerHTML = `
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      `;
+    } else if (conditionLower.includes('thunder') || conditionLower.includes('storm')) {
+      // Thunderstorm night
+      background.className = 'storm-background';
+    } else if (conditionLower.includes('cloud') || conditionLower.includes('overcast') || conditionLower.includes('partially')) {
+      // Cloudy night - dark animated sky
+      background.className = 'animated-sky';
+      background.style.background = 'linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460)';
     } else {
-      document.body.style.background = 'linear-gradient(to bottom right, #0a0a0a, #0d1b2a)';
+      // Default night - animated gradient
+      background.className = 'animated-sky';
+      background.style.background = 'linear-gradient(-45deg, #0f0c29, #302b63, #24243e)';
     }
-    if (animationContainer) animationContainer.style.filter = 'brightness(1)';
+  } else {
+    // Day backgrounds
+    if (conditionLower.includes('sunny') || conditionLower.includes('clear')) {
+      // Sunny day - rainbow waves
+      background.className = 'animated-sky rainbow-wave';
+    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle') || conditionLower.includes('shower')) {
+      // Rainy day - water bubbles
+      background.className = 'water-background';
+      background.innerHTML = `
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+      `;
+    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet') || conditionLower.includes('ice')) {
+      // Snowy day - floating particles
+      background.className = 'particles-background';
+      background.style.background = 'linear-gradient(to bottom, #e0eafc, #cfdef3)';
+      background.innerHTML = `
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      `;
+    } else if (conditionLower.includes('cloud') || conditionLower.includes('overcast') || conditionLower.includes('partially')) {
+      // Cloudy day - moving clouds 
+      background.className = 'cloud-background';
+      background.innerHTML = `
+        <div class="cloud-layer"></div>
+        <div class="cloud-layer"></div>
+        <div class="cloud-layer"></div>
+      `;
+    } else if (conditionLower.includes('thunder') || conditionLower.includes('storm')) {
+      // Thunderstorm day
+      background.className = 'storm-background';
+    } else if (conditionLower.includes('fog') || conditionLower.includes('mist') || conditionLower.includes('haze')) {
+      // Foggy day - particles
+      background.className = 'particles-background';
+      background.style.background = 'linear-gradient(to bottom, #bdc3c7, #2c3e50)';
+      background.innerHTML = `
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+      `;
+    } else {
+      // Default day - animated gradient
+      background.className = 'animated-sky';
+    }
   }
 }
 
@@ -632,7 +1029,7 @@ body {
   details.style.display = details.style.display === 'none' ? 'block' : 'none';
 }
 
-// ===== UPDATED FUNCTION FOR WEATHER ANIMATIONS =====
+// ===== IMPROVED FUNCTION FOR WEATHER ANIMATIONS =====
 function showWeatherAnimation(condition, isDay) {
   const conditionLower = condition.toLowerCase();
   const animationContainer = document.getElementById('weatherAnimation');
@@ -646,7 +1043,7 @@ function showWeatherAnimation(condition, isDay) {
     if (conditionLower.includes('clear')) {
       // Moon animation for clear nights
       animationContainer.innerHTML = '<div class="moon"></div>';
-    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle')) {
+    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle') || conditionLower.includes('shower')) {
       animationContainer.innerHTML = `
         <div class="rain-container">
           <div class="raindrop"></div>
@@ -657,7 +1054,7 @@ function showWeatherAnimation(condition, isDay) {
           <div class="raindrop"></div>
         </div>
       `;
-    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet')) {
+    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet') || conditionLower.includes('ice')) {
       animationContainer.innerHTML = `
         <div class="snow-container">
           <div class="snowflake"></div>
@@ -669,15 +1066,18 @@ function showWeatherAnimation(condition, isDay) {
       `;
     } else if (conditionLower.includes('thunder') || conditionLower.includes('storm')) {
       animationContainer.innerHTML = '<div class="lightning"></div>';
+    } else if (conditionLower.includes('cloud') || conditionLower.includes('overcast') || conditionLower.includes('partially')) {
+      // Cloud animation for partially cloudy nights
+      animationContainer.innerHTML = '<div class="cloud night-cloud"></div>';
     } else {
-      // Default night animation (clouds or stars)
+      // Default night animation
       animationContainer.innerHTML = '<div class="cloud night-cloud"></div>';
     }
   } else {
     // Day time animations
     if (conditionLower.includes('sunny') || conditionLower.includes('clear')) {
       animationContainer.innerHTML = '<div class="sun"></div>';
-    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle')) {
+    } else if (conditionLower.includes('rain') || conditionLower.includes('drizzle') || conditionLower.includes('shower')) {
       animationContainer.innerHTML = `
         <div class="rain-container">
           <div class="raindrop"></div>
@@ -688,7 +1088,7 @@ function showWeatherAnimation(condition, isDay) {
           <div class="raindrop"></div>
         </div>
       `;
-    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet')) {
+    } else if (conditionLower.includes('snow') || conditionLower.includes('sleet') || conditionLower.includes('ice')) {
       animationContainer.innerHTML = `
         <div class="snow-container">
           <div class="snowflake"></div>
@@ -698,7 +1098,8 @@ function showWeatherAnimation(condition, isDay) {
           <div class="snowflake"></div>
         </div>
       `;
-    } else if (conditionLower.includes('cloud') || conditionLower.includes('overcast')) {
+    } else if (conditionLower.includes('cloud') || conditionLower.includes('overcast') || conditionLower.includes('partially')) {
+      // Cloud animation for partially cloudy days (FIXED)
       animationContainer.innerHTML = '<div class="cloud"></div>';
     } else if (conditionLower.includes('thunder') || conditionLower.includes('storm')) {
       animationContainer.innerHTML = '<div class="lightning"></div>';
@@ -724,8 +1125,6 @@ function showWeatherAnimation(condition, isDay) {
     }
   }
 }
-// ===== END OF UPDATED ANIMATION FUNCTION =====
-
 
 
 
